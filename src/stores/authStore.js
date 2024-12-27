@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    status: 'unauthenticated', // або 'user', або 'admin'
+    status: 'unauthorized', // або 'user', або 'admin'
     userInfo: null // Інформація про користувача (наприклад, ім'я, ID тощо)
   }),
   actions: {
@@ -15,12 +15,12 @@ export const useAuthStore = defineStore('auth', {
       this.userInfo = { name: login, id: 2 };
     },
     logout() {
-      this.status = 'unauthenticated';
+      this.status = 'unauthorized';
       this.userInfo = null;
     }
   },
   getters: {
-    isAuthenticated: (state) => state.status !== 'unauthenticated',
+    isAuthorized: (state) => state.status !== 'unauthorized',
     isAdmin: (state) => state.status === 'admin'
   }
 });

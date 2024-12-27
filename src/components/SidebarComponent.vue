@@ -1,24 +1,33 @@
 <template>
     <div class="sidebar-container">
-        <LoginForm/>
+        <StatusCheck/>
+        <LoginForm v-if="!authStore.isAuthorized" />
     </div>
-</template>
+</template> 
 
 <script>
 import LoginForm from './LoginForm.vue';
+import StatusCheck from './StatusCheck.vue';
+import { useAuthStore } from '@/stores/authStore';
+
 export default {
     components: {
-        LoginForm
-    }
+        LoginForm, StatusCheck
+    },
+    setup() {
+        const authStore = useAuthStore();
+
+        return { authStore };
+},
 }
 
 </script>
 <style>
 
 .sidebar-container{
-    max-width: 300px;
+    min-width: 250px;
     border-right: 5px;
-    height: 500px;
+    height: 300px;
     border: 5px;
     background-color: #b597bd;
     padding: 20px;
