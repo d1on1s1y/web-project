@@ -10,9 +10,7 @@ export const useDrugStore = defineStore('drug',{
             const newValue = this.getDrugById(id).quantity + difference
             if(newValue >= 0){
                 try {
-                // Надсилаємо PATCH-запит для оновлення конкретного препарату
                 const response = await axios.patch(`/api/drugs/${id}`, {quantity: newValue});
-                // Оновлюємо препарат у локальному списку
                 const index = this.drugs.findIndex((drug) => drug._id === id);
                 if (index !== -1) {
                     this.drugs[index] = { ...this.drugs[index], ...response.data };

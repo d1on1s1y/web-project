@@ -17,8 +17,8 @@ export const useUserStore = defineStore('user',{
         },
         async fetchUsers() {
             try {
-              const response = await axios.get('/api/users'); // Запит до бекенду
-              this.users = response.data; // Зберігаємо список користувачів у стані
+              const response = await axios.get('/api/users'); 
+              this.users = response.data; 
             //   console.log('Users fetched sucsessfuly');
             } catch (error) {
               console.error('Error fetching users:', error);

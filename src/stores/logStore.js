@@ -25,8 +25,8 @@ export const useLogStore = defineStore('log',{
     async createLog(contributorName, time, description) {
         try {
           const newLog = { contributorName, time, description };
-          const response = await axios.post('/api/logs', newLog); // Запит на сервер
-          this.logs = [...this.logs,response.data]; // Додати створений лог до списку
+          const response = await axios.post('/api/logs', newLog); 
+          this.logs = [...this.logs,response.data]; 
             // console.log('New log created sucsessfully ', response.data);
 
         } catch (error) {
@@ -35,7 +35,7 @@ export const useLogStore = defineStore('log',{
       },
     async fetchLogs() {
         try {
-          const response = await axios.get('/api/logs'); // Запит до бекенду
+          const response = await axios.get('/api/logs'); 
           this.logs = response.data; 
         } catch (error) {
           console.error('Error fetching logs:', error);
