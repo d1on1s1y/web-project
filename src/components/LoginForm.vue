@@ -20,7 +20,9 @@ export default {
     setup() {
         const authStore = useAuthStore();
         const userStore = useUserStore();
-        const logStore = useLogStore();
+        const logStore = useLogStore(); //only POST requests
+
+        userStore.fetchUsers();
 
         return { authStore, userStore, logStore };
 

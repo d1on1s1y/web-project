@@ -1,14 +1,9 @@
 import { defineStore } from 'pinia';
+import axios from 'axios';
 
 export const useLogStore = defineStore('log',{
     state: () => ({
-        logs:[
-            {
-                contributorName: '',
-                time: '',
-                description:'',
-            }
-        ]
+        logs:[]
 
     }),
     actions:{
@@ -23,15 +18,29 @@ export const useLogStore = defineStore('log',{
             second: '2-digit',
             hour12: false
             });
-            const log = {
-                contributorName: name,
-                time: formattedDate,
-                description: description,
-            }
-            this.logs = [...this.logs,log]
-            // console.log(log);
 
+            this.createLog(name, formattedDate, description)
+        },
+            // Створити новий лог
+    async createLog(contributorName, time, description) {
+        try {
+          const newLog = { contributorName, time, description };
+          const response = await axios.post('/api/logs', newLog); // Запит на сервер
+          this.logs = [...this.logs,response.data]; // Додати створений лог до списку
+            // console.log('New log created sucsessfully ', response.data);
+
+        } catch (error) {
+          console.error('Error creating log:', error);
         }
+      },
+    async fetchLogs() {
+        try {
+          const response = await axios.get('/api/logs'); // Запит до бекенду
+          this.logs = response.data; 
+        } catch (error) {
+          console.error('Error fetching logs:', error);
+        }
+      },
     },
     getters:{
         getLogsByContributorName: (state) => (name) => state.logs.filter(el => el.contributorName === name)

@@ -1,54 +1,62 @@
 import { defineStore } from 'pinia';
-import { nanoid } from 'nanoid';
+import axios from 'axios';
 
 export const useOrderSupplyStore = defineStore('orderSupply',{
     state: () => ({
-        orders: [
-            {
-            drugName: 'Ібупрофен',
-            quantity: 2,
-            id: nanoid()
-            },
-            {
-            drugName: 'Парацетомол',
-            quantity: 5,
-            id: nanoid()
-            },
-            {
-            drugName: 'Клофелін',
-            quantity: 14,
-            id: nanoid()
-            },
-            {
-            drugName: 'Ношпа',
-            quantity: 1,
-            id: nanoid()
-            },
-            {
-            drugName: 'Ношпа',
-            quantity: 2,
-            id: nanoid()
-            }, 
-            {
-            drugName: 'Ношпа',
-            quantity: 1,
-            id: nanoid()
-            },    
-        ],
-        supplies: [
-            {
-            drugName: 'Ібупрофен',
-            quantity: 2,
-            id: nanoid()
-            },   
-        ]}),
+        orders: [],
+        supplies: []}),
         actions:{
-            deleteOrderSupplyById(id){
-                this.orders = this.orders.filter(el => el.id !== id)
-                this.supplies = this.supplies.filter(el => el.id !== id)
-            }
+            // deleteOrderSupplyById(id){
+            //     this.orders = this.orders.filter(el => el._id !== id)
+            //     this.supplies = this.supplies.filter(el => el._id !== id)
+            // }
+            async deleteOrderSupplyById(id){
+                //для демонстрації можна закомментити блок іф і розкомментити нижній код
+                if (this.orders.filter(el => el._id !== id)) {
+                    
+                    try {
+                        await axios.delete(`/api/orders/${id}`)
+                        this.orders = this.orders.filter(el => el._id !== id)
+                        
+                    } catch (error) {
+                        console.error('Error deleting order:', error);
+                    }
+                    return
+                }
+
+                try {
+                    await axios.delete(`/api/supplies/${id}`)
+                    this.supplies = this.supplies.filter(el => el._id !== id)
+                    
+                } catch (error) {
+                    console.error('Error deleting supply:', error);
+                }
+                
+                
+                
+                // this.orders = this.orders.filter(el => el._id !== id)
+                // this.supplies = this.supplies.filter(el => el._id !== id)
+            },
+            async fetchOrders() {
+                try {
+                  const response = await axios.get('/api/orders'); 
+                  this.orders = response.data; 
+                } catch (error) {
+                  console.error('Error fetching orders:', error);
+                }
+              },
+              async fetchSupplies() {
+                try {
+                  const response = await axios.get('/api/supplies'); 
+                  this.supplies = response.data; 
+                } catch (error) {
+                  console.error('Error fetching supplies:', error);
+                }
+              },
+
         },
         getters:{
-        getOrederSupplyById: (state) => (id) => state.orders.find(el => el.id === id) ? state.orders.find(el => el.id === id) : state.supplies.find(el => el.id === id)
+        getOrederSupplyById: (state) => (id) => state.orders.find(el => el._id === id) ? state.orders.find(el => el._id === id) : state.supplies.find(el => el._id === id)
+        //Блять, якого хуя, видає андефайндед// уже не выдає
     }
     })

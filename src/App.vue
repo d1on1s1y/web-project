@@ -33,6 +33,10 @@ export default {
     const drugStore = useDrugStore();
     const userStore = useUserStore();
     const authStore = useAuthStore();
+
+    drugStore.fetchDrugs()
+    userStore.fetchUsers()
+
     return { drugStore, userStore, authStore };
   }
 }

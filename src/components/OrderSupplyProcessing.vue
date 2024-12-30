@@ -4,8 +4,8 @@
 
         <p>{{coef > 0 ? "Поставка" : "Замовлення"}}</p>
         <ul>
-            <li v-for="(item) in dataArray" :key="item.id" >{{ item.drugName }} {{ item.quantity  }} 
-                <button v-bind:id="item.id" @click="acceptOrderSupply">accept</button>  
+            <li v-for="(item) in dataArray" :key="item._id" >{{ drugStore.getDrugById(item.drugІd).name }} {{ item.quantity  }} 
+                <button v-bind:id="item._id" @click="acceptOrderSupply">accept</button>  
             </li>
         </ul>
         
@@ -36,18 +36,24 @@ export default{
         const logStore = useLogStore()
         const authStore = useAuthStore()
 
+        drugStore.fetchDrugs();
+        orderSupplyStore.fetchOrders()
+        orderSupplyStore.fetchSupplies()
+
         return { drugStore, orderSupplyStore, logStore, authStore };
 },
 methods:{
     acceptOrderSupply(event){
         const item = this.orderSupplyStore.getOrederSupplyById(event.target.id);
-        if (!this.drugStore.getDrugByName(item.drugName)) {
+        
+        if (!this.drugStore.getDrugById(item.drugІd)) {
             return
         }
-        //добавить функцию для поставок что бы добавлять новые препараты
-        this.drugStore.changeQuantity(item.drugName, item.quantity * this.coef)
-        this.orderSupplyStore.deleteOrderSupplyById(item.id)
-        this.logStore.addLog(this.authStore.userInfo.name, (this.coef > 0 ? "Поставка" : "Замовлення") + ` ${item.drugName} в кількості ${item.quantity} прийнято` )
+
+        this.drugStore.changeQuantity(item.drugІd, item.quantity * this.coef)
+        this.orderSupplyStore.deleteOrderSupplyById(item._id)
+
+        this.logStore.addLog(this.authStore.userInfo.name, (this.coef > 0 ? "Поставка" : "Замовлення") + ` ${this.drugStore.getDrugById(item.drugІd).name} в кількості ${item.quantity} прийнято` )
     },  
 }
 }

@@ -5,7 +5,7 @@
     </select>
 
     <ul>
-        <li v-for="log in logStore.getLogsByContributorName(selected)" :key="log" >{{log.time }} {{log.contributorName}} {{log.description}}</li>
+        <li v-for="log in logStore.getLogsByContributorName(selected).reverse()" :key="log" >{{log.time }} {{log.contributorName}} {{log.description}}</li>
     </ul>
     
 </template>
@@ -18,6 +18,9 @@ export default {
     setup() {
         const logStore = useLogStore()
         const userStore = useUserStore()
+
+        logStore.fetchLogs()
+        userStore.fetchUsers()
 
         return {logStore, userStore}
     },
