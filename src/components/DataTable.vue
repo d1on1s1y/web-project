@@ -2,11 +2,11 @@
   <table>      
       <thead>
         <tr>
-          <th  v-for="key in Object.keys(dataArray[0])" :key="key.id">{{ key }}</th>
+          <th  v-for="key in Object.keys(dataArray[0]).slice(1)" :key="key.id">{{ key }}</th>
         </tr>
       </thead>
     <tr v-for="row in dataArray" :key="row.id" >
-      <td v-for="value in Object.values(row)" :key="value.id">{{ value }}</td>
+      <td v-for="value in Object.values(row).slice(1)" :key="value.id">{{ value }}</td>
     </tr>
     </table>
   </template>
